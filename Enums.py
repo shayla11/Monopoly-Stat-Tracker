@@ -1,6 +1,7 @@
 from enum import Enum
 
 from Property import Property
+from Railroad import Railroad
 
 
 class Properties(Enum):
@@ -35,3 +36,9 @@ class Properties(Enum):
     PARK_PLACE = Property("Park Place", "Dark Blue", 350, 200, [35, 175, 500, 1100, 1300, 1500])
     BOARDWALK = Property("Boardwalk", "Dark Blue", 400, 200, [50, 200, 600, 1400, 1700, 2000])
 
+
+class Railroads(Enum):
+    READING_RAILROAD = Railroad("Reading Railroad")
+    PENNSYLVANIA_RAILROAD = Railroad("Pennsylvania Railroad")
+    B_0_RAILROAD = Railroad("B & O Railroad")
+    SHORT_LINE = Railroad("Short Line")
