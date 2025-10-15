@@ -4,13 +4,11 @@ import Enums
 class Property:
 
     # Constructor
-    def __init__(self, name: str, color: str, base_cost: int, house_cost: int, hotel_cost: int,
-                 property_values: list[int]):
+    def __init__(self, name: str, color: str, base_cost: int, building_cost: int, property_values: list[int]):
         self.name = name
         self.color = color
         self.base_cost = base_cost
-        self.house_cost = house_cost
-        self.hotel_cost = hotel_cost
+        self.building_cost = building_cost
         self.property_values = property_values
 
         self.current_rent = property_values[0]
@@ -40,7 +38,7 @@ class Property:
             print("No more houses to sell")
         else:
             self.current_rent = self.property_values[self.houses_bought]
-            self.total_profit -= self.house_cost / 2  # adjust total profit if you sell back to bank
+            self.total_profit -= self.building_cost / 2  # adjust total profit if you sell back to bank
 
     def get_houses(self):
         return self.houses_bought
@@ -55,7 +53,7 @@ class Property:
         else:
             self.current_rent = self.property_values[0]
             self.hotel_bought = False
-            self.total_profit -= self.hotel_cost / 2  # adjust total profit if you sell back to bank
+            self.total_profit -= self.building_cost / 2  # adjust total profit if you sell back to bank
 
     def get_hotel(self):
         return self.hotel_bought
