@@ -1,7 +1,8 @@
 from enum import Enum
 
-from Property import Property
-from Railroad import Railroad
+from classes.Property import Property
+from classes.Railroad import Railroad
+from classes.Utility import Utility
 
 
 class Properties(Enum):
@@ -42,3 +43,8 @@ class Railroads(Enum):
     PENNSYLVANIA_RAILROAD = Railroad("Pennsylvania Railroad")
     B_0_RAILROAD = Railroad("B & O Railroad")
     SHORT_LINE = Railroad("Short Line")
+
+
+class Utilities(Enum):
+    ELECTRIC_COMPANY = Utility("Electric Company")
+    WATER_WORKS = Utility("Water Works")
