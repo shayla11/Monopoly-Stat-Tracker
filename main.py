@@ -1,4 +1,7 @@
 import Enums
+from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QHBoxLayout, QPushButton, QDialog, QVBoxLayout, QLineEdit, \
+    QFormLayout, QDialogButtonBox
+import sys
 
 
 def set_properties() -> str:
@@ -7,21 +10,49 @@ def set_properties() -> str:
 
     return "hi"
 
-if __name__ == '__main__':
-    baltic = Enums.Properties.BALTIC_AVE.value
+class Window(QDialog):
+    def __init__(self):
+        super().__init__(parent=None)
+        self.setWindowTitle("QDialog")
+        dialogLayout = QVBoxLayout()
+        formLayout = QFormLayout()
+        formLayout.addRow("Name:", QLineEdit())
+        formLayout.addRow("Age:", QLineEdit())
+        formLayout.addRow("Job:", QLineEdit())
+        formLayout.addRow("Hobbies:", QLineEdit())
+        dialogLayout.addLayout(formLayout)
+        buttons = QDialogButtonBox()
+        buttons.setStandardButtons(
+            QDialogButtonBox.StandardButton.Cancel
+            | QDialogButtonBox.StandardButton.Ok
+        )
+        dialogLayout.addWidget(buttons)
+        self.setLayout(dialogLayout)
+
+#if __name__ == '__main__':
+    #baltic = Enums.Properties.BALTIC_AVE.value
     #print(baltic.name)
     #print(baltic.hotel_bought)
     #baltic.buy_hotel()
     #print(baltic.get_hotel())
-    print(baltic.get_current_property_rent())
-    baltic.sell_hotel()
-    baltic.opponent_landed()
-    baltic.opponent_landed()
-    baltic.opponent_landed()
-    baltic.buy_house()
-    baltic.opponent_landed()
-    baltic.opponent_landed()
-    print(baltic.get_current_property_rent())
+    #print(baltic.get_current_property_rent())
+    #baltic.sell_hotel()
+    #baltic.opponent_landed()
+    #baltic.opponent_landed()
+    #baltic.opponent_landed()
+    #baltic.buy_house()
+    #baltic.opponent_landed()
+    #baltic.opponent_landed()
+    #print(baltic.get_current_property_rent())
+
+
+if __name__ == "__main__":
+    app = QApplication([])
+    window = Window()
+    window.show()
+    sys.exit(app.exec())
+
+
 
     # Utilize QtPy to figure out how to make a UI that has some stats and buttons that will
     # 1. Allow player to say that bought a property
