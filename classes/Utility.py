@@ -9,6 +9,7 @@ class Utility:
         self.utilities_owned = 0
         self.utilities_set = False
         self.total_profit = 0
+        self.owned = False
 
     def buy_utility(self):
         self.utilities_owned += 1

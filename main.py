@@ -1,9 +1,32 @@
+import re
+
 from PyQt6 import uic
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QHBoxLayout
 import sys
 
 import Enums
+from Enums import Utilities, Railroads, Properties
+
+RAILROADS = [Enums.Railroads.B_O_RAILROAD.name, Enums.Railroads.READING_RAILROAD.name, Enums.Railroads.PENNSYLVANIA_RAILROAD.name, Enums.Railroads.SHORT_LINE.name]
+UTILITIES = [Enums.Utilities.WATER_WORKS.name, Enums.Utilities.ELECTRIC_COMPANY.name]
+
+
+def get_property(name: str) -> Utilities | Railroads | Properties:
+    # Remove unwanted characters: anything not alphanumeric or space
+    cleaned = re.sub(r"[^\w\s]", "", name)
+    # Replace spaces with underscores and convert to uppercase
+    enum_name =  "_".join(cleaned.strip().upper().split())
+
+    # Check for Railroad or Utilities
+    if enum_name in RAILROADS:
+        board_property = Enums.Railroads[enum_name]
+    elif enum_name in UTILITIES:
+        board_property = Enums.Utilities[enum_name]
+    else:
+        board_property = Enums.Properties[enum_name]
+    return board_property
+
 
 class Window(QMainWindow):
     def __init__(self):
@@ -21,8 +44,7 @@ class Window(QMainWindow):
     def add_property_box(self):
         # Get name of property added
         property_name = self.propertySelectName.currentText()
-        enum_name = property_name.upper().replace(" ", "_")  # Convert to enum
-        board_property = Enums.Properties[enum_name]
+        board_property = get_property(property_name)  # Convert to enum
 
         # If property already owned, skip adding a widget
         if board_property.value.owned:

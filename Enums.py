@@ -41,7 +41,7 @@ class Properties(Enum):
 class Railroads(Enum):
     READING_RAILROAD = Railroad("Reading Railroad")
     PENNSYLVANIA_RAILROAD = Railroad("Pennsylvania Railroad")
-    B_0_RAILROAD = Railroad("B & O Railroad")
+    B_O_RAILROAD = Railroad("B & O Railroad")
     SHORT_LINE = Railroad("Short Line")
 
 

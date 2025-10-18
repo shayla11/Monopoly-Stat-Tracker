@@ -9,6 +9,8 @@ class Railroad:
         self.railroads_owned = 0
         self.railroad_set = False
         self.total_profit = 0
+        self.owned = False
+
 
     def buy_railroad(self):
         self.railroads_owned += 1
