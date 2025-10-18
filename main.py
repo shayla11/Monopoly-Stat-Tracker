@@ -1,6 +1,6 @@
 from PyQt6 import uic
 
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
+from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QHBoxLayout
 import sys
 
 class Window(QMainWindow):
@@ -8,18 +8,19 @@ class Window(QMainWindow):
         super().__init__()
         uic.loadUi("firstExample.ui", self)
 
-        # ✅ Access the existing horizontal layout from the container
-        self.hbox_layout = self.horizontalLayout.layout()
+        self.scrollContent = self.scrollArea.widget()  # scrollAreaWidgetContents
+        self.hbox_layout = QHBoxLayout(self.scrollContent)
+        self.scrollContent.setLayout(self.hbox_layout)
 
         # Connect the button
-        self.addButton.clicked.connect(self.add_widget_to_hbox)
+        self.buyPropertyButton.clicked.connect(self.add_property_box)
 
-        # Optional counter for naming
         self.counter = 0
 
-    def add_widget_to_hbox(self):
-        label = QLabel(f"Widget {self.counter}")
-        label.setStyleSheet("background-color: lightgreen; border: 1px solid black; padding: 5px;")
+    def add_property_box(self):
+        label = QLabel(f"Box {self.counter}")
+        label.setFixedSize(250, 400)  # ✅ Fixed size
+        label.setStyleSheet("background-color: lightblue; border: 1px solid black; padding: 5px;")
         self.hbox_layout.addWidget(label)
         self.counter += 1
 

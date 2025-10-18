@@ -189,7 +189,7 @@
       <height>51</height>
      </rect>
     </property>
-    <widget class="QPushButton" name="addButton">
+    <widget class="QPushButton" name="buyPropertyButton">
      <property name="geometry">
       <rect>
        <x>260</x>
@@ -208,20 +208,45 @@
      <rect>
       <x>10</x>
       <y>70</y>
-      <width>741</width>
-      <height>431</height>
+      <width>771</width>
+      <height>461</height>
      </rect>
     </property>
-    <widget class="QWidget" name="horizontalLayoutWidget">
+    <widget class="QScrollArea" name="scrollArea">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>731</width>
-       <height>421</height>
+       <width>751</width>
+       <height>451</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout"/>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>749</width>
+        <height>449</height>
+       </rect>
+      </property>
+      <widget class="QWidget" name="scrollContent" native="true">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>241</width>
+         <height>411</height>
+        </rect>
+       </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
     </widget>
    </widget>
    <zorder>buyBar</zorder>
