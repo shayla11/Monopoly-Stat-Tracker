@@ -17,6 +17,7 @@ class Property:
         self.houses_bought = 0
         self.hotel_bought = False
         self.color_set = False
+        self.owned = False
 
     def opponent_landed(self):
         self.total_profit += self.current_rent
