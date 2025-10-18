@@ -1,12 +1,28 @@
 from PyQt6 import uic
 
-from PyQt6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLineEdit, QFormLayout, QDialogButtonBox, QMainWindow
+from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
 import sys
 
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("firstExample.ui", self)  # Load the .ui file into this window
+        uic.loadUi("firstExample.ui", self)
+
+        # ✅ Access the existing horizontal layout from the container
+        self.hbox_layout = self.horizontalLayout.layout()
+
+        # Connect the button
+        self.addButton.clicked.connect(self.add_widget_to_hbox)
+
+        # Optional counter for naming
+        self.counter = 0
+
+    def add_widget_to_hbox(self):
+        label = QLabel(f"Widget {self.counter}")
+        label.setStyleSheet("background-color: lightgreen; border: 1px solid black; padding: 5px;")
+        self.hbox_layout.addWidget(label)
+        self.counter += 1
+
 
 if __name__ == "__main__":
     app = QApplication([])
