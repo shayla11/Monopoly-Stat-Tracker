@@ -2,7 +2,7 @@ import re
 
 from PyQt6 import uic
 
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QHBoxLayout
+from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QWidget
 import sys
 
 import Enums
@@ -16,7 +16,7 @@ def get_property(name: str) -> Utilities | Railroads | Properties:
     # Remove unwanted characters: anything not alphanumeric or space
     cleaned = re.sub(r"[^\w\s]", "", name)
     # Replace spaces with underscores and convert to uppercase
-    enum_name =  "_".join(cleaned.strip().upper().split())
+    enum_name = "_".join(cleaned.strip().upper().split())
 
     # Check for Railroad or Utilities
     if enum_name in RAILROADS:
@@ -28,7 +28,7 @@ def get_property(name: str) -> Utilities | Railroads | Properties:
     return board_property
 
 
-class Window(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.owned_properties: list[Enums.Properties] = []
@@ -56,24 +56,22 @@ class Window(QMainWindow):
             board_property.value.owned = True
             self.owned_properties.append(board_property.name)
             print("Owned Properties" + str(self.owned_properties))
-            label = QLabel(f"{property_name}")
-            label.setFixedSize(250, 400)
-            label.setStyleSheet("background-color: lightblue; border: 1px solid black; padding: 5px;")
-            self.hbox_layout.addWidget(label)
+            box = PropertyBox(property_name)
+            box.setFixedSize(250, 400)
+            self.hbox_layout.addWidget(box)
+
+
+class PropertyBox(QWidget):
+    def __init__(self, name):
+        super().__init__()
+        uic.loadUi("propertyCard.ui", self)
+
+        # Set the name from the box to the property
+        self.propertyNameLabel.setText(name)
 
 
 if __name__ == "__main__":
     app = QApplication([])
-    window = Window()
+    window = MainWindow()
     window.show()
     sys.exit(app.exec())
-
-    # Utilize QtPy to figure out how to make a UI that has some stats and buttons that will
-    # 1. Allow player to say that bought a property
-    # 2. Buy Sell Houses / Hotels
-    # 3. Log Opponent landed on their property
-    # 4. Keep track of total profit from owned properties
-    # May make some github project issues to track these!
-
-    # will also need to be definityive on how the total profit will be. maybe a mode to start from price put in, or pure profits. Or Both!
-    # will also need to deciede will the method have barriers for over buying and over selling properites? or will buttons be disabled. need to exeperiment with QtPy
