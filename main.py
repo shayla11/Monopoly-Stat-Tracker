@@ -64,42 +64,44 @@ class PropertyBox(QWidget):
         super().__init__()
         uic.loadUi("propertyCard.ui", self)
 
-        # The actual Property object
-        self.property_enum = board_property
-        self.property = board_property.value  # <--- Access the Property instance
-
-        # Set the name from the box to the property
+        self.property = board_property.value
+        self.rent = 0
+        self.total_profit = 0
+        # Set the name of the box to the property name
         self.propertyNameLabel.setText(name)
+        # Set Color
 
-        # Connect signals
-        self.hotelOwnedCheckBox.setChecked(False)
+        # Connect buttons to methods
         self.housesOwnedSpinBox.valueChanged.connect(self.update_rent)
         self.hotelOwnedCheckBox.clicked.connect(self.toggle_hotel)
+        self.opponentLandedButton.clicked.connect(self.add_rent_to_total)
 
-        # Initial rent
+        # Set initial rent
         self.update_rent()
 
     def toggle_hotel(self):
         self.hotelOwnedCheckBox = not self.hotelOwnedCheckBox
-
-        # Reset houses if hotel is turned on
+        # Reset houses to 0 if hotel is turned on
         if self.hotelOwnedCheckBox:
             self.housesOwnedSpinBox.setValue(0)
-
         self.update_rent()
 
     def update_rent(self):
         if not self.hotelOwnedCheckBox:
-            rent = self.property.property_values[5]  # Hotel rent
+            self.rent = self.property.property_values[5]  # Hotel rent
         else:
             house_count = self.housesOwnedSpinBox.value()
             if house_count > 4:
                 print("Max of 4 houses reached!")
                 self.housesOwnedSpinBox.setValue(4)
                 house_count = 4
-            rent = self.property.property_values[house_count]
+            self.rent = self.property.property_values[house_count]
 
-        self.currentRentAmountlabel.setText(f"${rent}")
+        self.currentRentAmountlabel.setText(f"${self.rent}")
+
+    def add_rent_to_total(self):
+        self.total_profit = self.total_profit + self.rent
+        self.totalProfitAmountLabel.setText(f"${self.total_profit}")
 
 
 if __name__ == "__main__":
