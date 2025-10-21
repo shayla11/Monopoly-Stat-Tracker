@@ -8,8 +8,9 @@ import sys
 import Enums
 from Enums import Utilities, Railroads, Properties
 
-RAILROADS = [Enums.Railroads.B_O_RAILROAD.name, Enums.Railroads.READING_RAILROAD.name, Enums.Railroads.PENNSYLVANIA_RAILROAD.name, Enums.Railroads.SHORT_LINE.name]
-UTILITIES = [Enums.Utilities.WATER_WORKS.name, Enums.Utilities.ELECTRIC_COMPANY.name]
+RAILROADS_LIST = [Enums.Railroads.B_O_RAILROAD.name, Enums.Railroads.READING_RAILROAD.name,
+                  Enums.Railroads.PENNSYLVANIA_RAILROAD.name, Enums.Railroads.SHORT_LINE.name]
+UTILITIES_LIST = [Enums.Utilities.WATER_WORKS.name, Enums.Utilities.ELECTRIC_COMPANY.name]
 
 
 def get_property(name: str) -> Utilities | Railroads | Properties:
@@ -19,9 +20,9 @@ def get_property(name: str) -> Utilities | Railroads | Properties:
     enum_name = "_".join(cleaned.strip().upper().split())
 
     # Check for Railroad or Utilities
-    if enum_name in RAILROADS:
+    if enum_name in RAILROADS_LIST:
         board_property = Enums.Railroads[enum_name]
-    elif enum_name in UTILITIES:
+    elif enum_name in UTILITIES_LIST:
         board_property = Enums.Utilities[enum_name]
     else:
         board_property = Enums.Properties[enum_name]
@@ -43,6 +44,7 @@ class MainWindow(QMainWindow):
 
     def add_property_box(self):
         # Get name of property added
+        global box
         property_name = self.propertySelectName.currentText()
         board_property = get_property(property_name)  # Convert to enum
 
@@ -54,12 +56,21 @@ class MainWindow(QMainWindow):
             board_property.value.owned = True
             self.owned_properties.append(board_property.name)
             print("Owned Properties" + str(self.owned_properties))
-            box = PropertyBox(property_name, board_property)
-            box.setFixedSize(250, 400)
-            self.hbox_layout.addWidget(box)
+
+            # Create box based on property, railroad, or utility
+            if board_property.name in UTILITIES_LIST:
+                # box = UtilityCardBox()
+                print("utility card not ready yet")
+            elif board_property.name in RAILROADS_LIST:
+                # box = RailroadCardBox()
+                print("railroad card not ready yet")
+            else:
+                box = PropertyCardBox(property_name, board_property)
+                box.setFixedSize(250, 400)  # Move outside else when railroad and utility is ready
+                self.hbox_layout.addWidget(box)  # Move outside else when railroad and utility is ready
 
 
-class PropertyBox(QWidget):
+class PropertyCardBox(QWidget):
     def __init__(self, name: str, board_property: Utilities | Railroads | Properties):
         super().__init__()
         uic.loadUi("propertyCard.ui", self)
@@ -95,7 +106,7 @@ class PropertyBox(QWidget):
                 print("Max of 4 houses reached!")
                 self.housesOwnedSpinBox.setValue(4)
                 house_count = 4
-            self.rent = self.property.property_values[house_count]
+            self.rent = self.property.property_values[house_count]  # Grab house rent based on count
 
         self.currentRentAmountlabel.setText(f"${self.rent}")
 
