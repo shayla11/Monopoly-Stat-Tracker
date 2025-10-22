@@ -33,7 +33,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.owned_properties: list[Enums.Properties] = []
-        uic.loadUi("firstExample.ui", self)
+        uic.loadUi("MainWindow.ui", self)
 
         self.scrollContent = self.scrollArea.widget()
         self.hbox_layout = QHBoxLayout(self.scrollContent)
