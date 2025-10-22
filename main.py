@@ -1,8 +1,9 @@
 import re
 
 from PyQt6 import uic
+from PyQt6.QtGui import QPixmap
 
-from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QWidget
+from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QWidget, QLabel
 import sys
 
 import Enums
@@ -33,18 +34,17 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.owned_properties: list[Enums.Properties] = []
-        uic.loadUi("MainWindow.ui", self)
+        uic.loadUi("UIs/MainWindow.ui", self)
 
         self.scrollContent = self.scrollArea.widget()
         self.hbox_layout = QHBoxLayout(self.scrollContent)
         self.scrollContent.setLayout(self.hbox_layout)
 
         # Connect the buy property button
-        self.buyPropertyButton.clicked.connect(self.add_property_box)
+        self.buyPropertyButton.clicked.connect(self.add_box)
 
-    def add_property_box(self):
+    def add_box(self):
         # Get name of property added
-        global box
         property_name = self.propertySelectName.currentText()
         board_property = get_property(property_name)  # Convert to enum
 
@@ -62,8 +62,10 @@ class MainWindow(QMainWindow):
                 # box = UtilityCardBox()
                 print("utility card not ready yet")
             elif board_property.name in RAILROADS_LIST:
-                # box = RailroadCardBox()
-                print("railroad card not ready yet")
+                # We are going to have to reimage the railroad structure!
+                box = RailroadCardBox(property_name, board_property)
+                box.setFixedSize(250, 400)
+                self.hbox_layout.addWidget(box)
             else:
                 box = PropertyCardBox(property_name, board_property)
                 box.setFixedSize(250, 400)  # Move outside else when railroad and utility is ready
@@ -71,9 +73,9 @@ class MainWindow(QMainWindow):
 
 
 class PropertyCardBox(QWidget):
-    def __init__(self, name: str, board_property: Utilities | Railroads | Properties):
+    def __init__(self, name: str, board_property: Properties):
         super().__init__()
-        uic.loadUi("propertyCard.ui", self)
+        uic.loadUi("UIs/propertyCard.ui", self)
 
         self.property = board_property.value
         self.rent = 0
@@ -103,10 +105,50 @@ class PropertyCardBox(QWidget):
         else:
             house_count = self.housesOwnedSpinBox.value()
             if house_count > 4:
-                print("Max of 4 houses reached!")
+                print("Max houses reached!")
                 self.housesOwnedSpinBox.setValue(4)
                 house_count = 4
             self.rent = self.property.property_values[house_count]  # Grab house rent based on count
+
+        self.currentRentAmountlabel.setText(f"${self.rent}")
+
+    def add_rent_to_total(self):
+        self.total_profit = self.total_profit + self.rent
+        self.totalProfitAmountLabel.setText(f"${self.total_profit}")
+
+
+class RailroadCardBox(QWidget):
+    def __init__(self, board_property: Railroads):
+        super().__init__()
+        uic.loadUi("UIs/railroadCard.ui", self)
+
+        self.railroad = board_property.value
+        self.rent = 0
+        self.total_profit = 0
+
+        # Set the name of the box to the property name
+        # self.railroadNameLabel.setText(name) -> Lets just do one railroad box that keeps track of 1
+        # Set Color
+
+        # Set Railroad Picture
+        pixmap = QPixmap('railroad.png')
+        self.railroadPic.setPixmap(pixmap)
+        self.railroadPic.setScaledContents(True)  # Optional
+
+        # Connect buttons to methods
+        self.railroadOwnedSpinBox.valueChanged.connect(self.update_rent)
+        self.opponentLandedButton.clicked.connect(self.add_rent_to_total)
+
+        # Set initial rent
+        self.update_rent()
+
+    def update_rent(self):
+        railroad_count = self.railroadOwnedSpinBox.value()
+        if railroad_count > 4:
+            print("Max railroads reached!")
+            self.railroadOwnedSpinBox.setValue(4)
+            railroad_count = 4
+        self.rent = self.railroad.railroad_rent[railroad_count]  # Grab house rent based on count
 
         self.currentRentAmountlabel.setText(f"${self.rent}")
 
