@@ -63,7 +63,7 @@ class MainWindow(QMainWindow):
                 print("utility card not ready yet")
             elif board_property.name in RAILROADS_LIST:
                 # We are going to have to reimage the railroad structure!
-                box = RailroadCardBox(property_name, board_property)
+                box = RailroadCardBox(board_property)
                 box.setFixedSize(250, 400)
                 self.hbox_layout.addWidget(box)
             else:
@@ -132,8 +132,8 @@ class RailroadCardBox(QWidget):
 
         # Set Railroad Picture
         pixmap = QPixmap('railroad.png')
-        self.railroadPic.setPixmap(pixmap)
-        self.railroadPic.setScaledContents(True)  # Optional
+        self.railroadPic1.setPixmap(pixmap)
+        self.railroadPic1.setScaledContents(True)  # Optional
 
         # Connect buttons to methods
         self.railroadOwnedSpinBox.valueChanged.connect(self.update_rent)
