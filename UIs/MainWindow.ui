@@ -25,17 +25,22 @@
     </property>
     <item>
      <property name="text">
+      <string>Railroad</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Utility</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>Baltic Ave</string>
      </property>
     </item>
     <item>
      <property name="text">
       <string>Mediterranean Ave</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Reading Railroad</string>
      </property>
     </item>
     <item>
@@ -48,7 +53,8 @@
       <string>Vermont Ave</string>
      </property>
      <property name="icon">
-      <iconset theme="blue"/>
+      <iconset theme="blue">
+       <normaloff>.</normaloff>.</iconset>
      </property>
     </item>
     <item>
@@ -63,22 +69,12 @@
     </item>
     <item>
      <property name="text">
-      <string>Electric Company</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
       <string>States Ave</string>
      </property>
     </item>
     <item>
      <property name="text">
       <string>Virginia Ave</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Pennsylvania Railroad</string>
      </property>
     </item>
     <item>
@@ -113,22 +109,12 @@
     </item>
     <item>
      <property name="text">
-      <string>B &amp; O Railroad</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
       <string>Atlantic Ave</string>
      </property>
     </item>
     <item>
      <property name="text">
       <string>Ventnor Ave</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Water Works</string>
      </property>
     </item>
     <item>
@@ -149,11 +135,6 @@
     <item>
      <property name="text">
       <string>Pennsylvania Ave</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Short Line</string>
      </property>
     </item>
     <item>
