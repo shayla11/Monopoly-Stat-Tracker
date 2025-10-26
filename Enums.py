@@ -38,11 +38,8 @@ class Properties(Enum):
     BOARDWALK = Property("Boardwalk", "Dark Blue", 400, 200, [50, 200, 600, 1400, 1700, 2000])
 
 
-class Railroads(Enum):
-    READING_RAILROAD = Railroad("Reading Railroad")
-    PENNSYLVANIA_RAILROAD = Railroad("Pennsylvania Railroad")
-    B_O_RAILROAD = Railroad("B & O Railroad")
-    SHORT_LINE = Railroad("Short Line")
+#class Railroads(Enum):
+#    RAILROAD = Railroad()
 
 
 class Utilities(Enum):

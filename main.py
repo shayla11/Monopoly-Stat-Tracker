@@ -3,30 +3,29 @@ import re
 from PyQt6 import uic
 from PyQt6.QtGui import QPixmap
 
-from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QWidget, QLabel
+from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QWidget
 import sys
 
 import Enums
-from Enums import Utilities, Railroads, Properties
+from Enums import Utilities, Properties
+from classes.Railroad import Railroad
 
-RAILROADS_LIST = [Enums.Railroads.B_O_RAILROAD.name, Enums.Railroads.READING_RAILROAD.name,
-                  Enums.Railroads.PENNSYLVANIA_RAILROAD.name, Enums.Railroads.SHORT_LINE.name]
 UTILITIES_LIST = [Enums.Utilities.WATER_WORKS.name, Enums.Utilities.ELECTRIC_COMPANY.name]
 
 
-def get_property(name: str) -> Utilities | Railroads | Properties:
+def get_property(name: str) -> Utilities | Railroad | Properties:
     # Remove unwanted characters: anything not alphanumeric or space
     cleaned = re.sub(r"[^\w\s]", "", name)
     # Replace spaces with underscores and convert to uppercase
     enum_name = "_".join(cleaned.strip().upper().split())
 
     # Check for Railroad or Utilities
-    if enum_name in RAILROADS_LIST:
-        board_property = Enums.Railroads[enum_name]
+    if enum_name.__contains__("RAILROAD"):
+        board_property = Railroad("Railroad")
     elif enum_name in UTILITIES_LIST:
-        board_property = Enums.Utilities[enum_name]
+        board_property = Enums.Utilities[enum_name].value
     else:
-        board_property = Enums.Properties[enum_name]
+        board_property = Enums.Properties[enum_name].value
     return board_property
 
 
@@ -49,11 +48,12 @@ class MainWindow(QMainWindow):
         board_property = get_property(property_name)  # Convert to enum
 
         # If property already owned, skip adding a widget
-        if board_property.value.owned:
+
+        if board_property.owned:
             print(board_property.name + " already own!")
         else:
             # Else proceed with adding the property to the own list and adding a new widget box
-            board_property.value.owned = True
+            board_property.owned = True
             self.owned_properties.append(board_property.name)
             print("Owned Properties" + str(self.owned_properties))
 
@@ -61,8 +61,7 @@ class MainWindow(QMainWindow):
             if board_property.name in UTILITIES_LIST:
                 # box = UtilityCardBox()
                 print("utility card not ready yet")
-            elif board_property.name in RAILROADS_LIST:
-                # We are going to have to reimage the railroad structure!
+            elif board_property.name.__contains__("Railroad"):
                 box = RailroadCardBox(board_property)
                 box.setFixedSize(250, 400)
                 self.hbox_layout.addWidget(box)
@@ -77,7 +76,12 @@ class PropertyCardBox(QWidget):
         super().__init__()
         uic.loadUi("UIs/propertyCard.ui", self)
 
-        self.property = board_property.value
+        # Set property based on class or enum object
+        #if type(board_property) == Railroad:
+        self.property = board_property
+        #else:
+        #    self.property = board_property.value
+
         self.rent = 0
         self.total_profit = 0
         # Set the name of the box to the property name
@@ -89,8 +93,11 @@ class PropertyCardBox(QWidget):
         self.hotelOwnedCheckBox.clicked.connect(self.toggle_hotel)
         self.opponentLandedButton.clicked.connect(self.add_rent_to_total)
 
-        # Set initial rent
-        self.update_rent()
+        # Set initial rent (Skip for railroads and utilities)
+        if name.__contains__("Railroad"):
+            print("Set up railroad card")
+        else:
+            self.update_rent()
 
     def toggle_hotel(self):
         self.hotelOwnedCheckBox = not self.hotelOwnedCheckBox
@@ -118,29 +125,59 @@ class PropertyCardBox(QWidget):
 
 
 class RailroadCardBox(QWidget):
-    def __init__(self, board_property: Railroads):
+    def __init__(self, board_property: Railroad):
         super().__init__()
         uic.loadUi("UIs/railroadCard.ui", self)
 
-        self.railroad = board_property.value
+        self.railroad = board_property
         self.rent = 0
         self.total_profit = 0
 
-        # Set the name of the box to the property name
-        # self.railroadNameLabel.setText(name) -> Lets just do one railroad box that keeps track of 1
-        # Set Color
-
         # Set Railroad Picture
-        pixmap = QPixmap('railroad.png')
-        self.railroadPic1.setPixmap(pixmap)
-        self.railroadPic1.setScaledContents(True)  # Optional
+        self.pixmap = QPixmap('railroad.png')
+        self.railroadPic1.setPixmap(self.pixmap)
+        self.railroadPic2.setPixmap(self.pixmap)
+        self.railroadPic3.setPixmap(self.pixmap)
+        self.railroadPic4.setPixmap(self.pixmap)
+
+        self.railroadPic1.setScaledContents(True)
+        self.railroadPic2.setScaledContents(False)
+        self.railroadPic3.setScaledContents(False)
+        self.railroadPic4.setScaledContents(False)
+
+        self.railroadOwnedSpinBox.setValue(1)
 
         # Connect buttons to methods
         self.railroadOwnedSpinBox.valueChanged.connect(self.update_rent)
+        self.railroadOwnedSpinBox.valueChanged.connect(self.update_railroad_logos)
+
         self.opponentLandedButton.clicked.connect(self.add_rent_to_total)
 
         # Set initial rent
         self.update_rent()
+
+    def update_railroad_logos(self):
+        railroad_count = self.railroadOwnedSpinBox.value()
+        # Set train pictures
+        if railroad_count == 0:
+            self.railroadPic1.setScaledContents(False)
+            self.railroadPic2.setScaledContents(False)  # Off
+            self.railroadPic3.setScaledContents(False)  # Off
+            self.railroadPic4.setScaledContents(False)  # Off
+        if railroad_count == 1:
+            self.railroadPic1.setScaledContents(True)
+            self.railroadPic2.setScaledContents(False)  # Off
+            self.railroadPic3.setScaledContents(False)  # Off
+            self.railroadPic4.setScaledContents(False)  # Off
+        if railroad_count == 2:
+            self.railroadPic2.setScaledContents(True)
+            self.railroadPic3.setScaledContents(False)  # Off
+            self.railroadPic4.setScaledContents(False)  # Off
+        if railroad_count == 3:
+            self.railroadPic3.setScaledContents(True)
+            self.railroadPic4.setScaledContents(False)  # Off
+        if railroad_count == 4:
+            self.railroadPic4.setScaledContents(True)
 
     def update_rent(self):
         railroad_count = self.railroadOwnedSpinBox.value()

@@ -12,23 +12,6 @@ class Railroad:
         self.owned = False
 
 
-    def buy_railroad(self):
-        self.railroads_owned += 1
-        print("{0} was bought!".format(self.name))
-
-    def sell_railroad(self):
-        if self.railroads_owned == 0:
-            print("No owned railroads to sell")
-        else:
-            self.railroads_owned -= 1
-
-    def opponent_landed(self):
-        self.total_profit += self.railroad_rent[self.railroads_owned]
-        print("Opponent landed on: {0}. +${1} (Total Gross: +${2})".format(str(self.name),
-                                                                           str(self.railroad_rent[self.railroads_owned]),
-                                                                           str(self.total_profit)))
-
-
 
 
 
