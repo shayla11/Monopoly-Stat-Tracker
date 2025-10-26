@@ -84,6 +84,7 @@ class PropertyCardBox(QWidget):
         # Set the name of the box to the property name
         self.propertyNameLabel.setText(name)
         # Set Color
+        self.propertyNameLabel.setStyleSheet(f"background-color: {board_property.color}; border: 3px solid black;")
 
         # Connect buttons to methods
         self.housesOwnedSpinBox.valueChanged.connect(self.update_rent)
