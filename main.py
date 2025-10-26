@@ -41,13 +41,15 @@ class MainWindow(QMainWindow):
         # Connect the buy property button
         self.buyPropertyButton.clicked.connect(self.add_box)
 
+        self.railroad_is_owned = False
+
     def add_box(self):
         # Get name of property added
         property_name = self.propertySelectName.currentText()
         board_property = get_property(property_name)  # Convert to enum
 
         # If property already owned, skip adding a widget
-        if board_property.owned:
+        if (type(board_property) == Railroad and self.railroad_is_owned) or board_property.owned:
             print(board_property.name + " already own!")
 
         # Else proceed with adding the property to the own list and adding a new widget box
@@ -61,6 +63,7 @@ class MainWindow(QMainWindow):
                 # box = UtilityCardBox()
                 print("utility card not ready yet")
             elif board_property.name.__contains__("Railroad"):
+                self.railroad_is_owned = True
                 box = RailroadCardBox(board_property)
                 box.setFixedSize(250, 400)
                 self.hbox_layout.addWidget(box)
