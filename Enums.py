@@ -38,10 +38,6 @@ class Properties(Enum):
     BOARDWALK = Property("Boardwalk", "Dark Blue", 400, 200, [50, 200, 600, 1400, 1700, 2000])
 
 
-#class Railroads(Enum):
-#    RAILROAD = Railroad()
-
-
 class Utilities(Enum):
     ELECTRIC_COMPANY = Utility("Electric Company")
     WATER_WORKS = Utility("Water Works")

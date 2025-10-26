@@ -14,9 +14,8 @@ UTILITIES_LIST = [Enums.Utilities.WATER_WORKS.name, Enums.Utilities.ELECTRIC_COM
 
 
 def get_property(name: str) -> Utilities | Railroad | Properties:
-    # Remove unwanted characters: anything not alphanumeric or space
+    # Remove and replace unwanted characters and make uppercase
     cleaned = re.sub(r"[^\w\s]", "", name)
-    # Replace spaces with underscores and convert to uppercase
     enum_name = "_".join(cleaned.strip().upper().split())
 
     # Check for Railroad or Utilities
@@ -48,11 +47,11 @@ class MainWindow(QMainWindow):
         board_property = get_property(property_name)  # Convert to enum
 
         # If property already owned, skip adding a widget
-
         if board_property.owned:
             print(board_property.name + " already own!")
+
+        # Else proceed with adding the property to the own list and adding a new widget box
         else:
-            # Else proceed with adding the property to the own list and adding a new widget box
             board_property.owned = True
             self.owned_properties.append(board_property.name)
             print("Owned Properties" + str(self.owned_properties))
@@ -76,12 +75,7 @@ class PropertyCardBox(QWidget):
         super().__init__()
         uic.loadUi("UIs/propertyCard.ui", self)
 
-        # Set property based on class or enum object
-        #if type(board_property) == Railroad:
         self.property = board_property
-        #else:
-        #    self.property = board_property.value
-
         self.rent = 0
         self.total_profit = 0
         # Set the name of the box to the property name
@@ -94,9 +88,7 @@ class PropertyCardBox(QWidget):
         self.opponentLandedButton.clicked.connect(self.add_rent_to_total)
 
         # Set initial rent (Skip for railroads and utilities)
-        if name.__contains__("Railroad"):
-            print("Set up railroad card")
-        else:
+        if not name.__contains__("Railroad"):
             self.update_rent()
 
     def toggle_hotel(self):
@@ -115,7 +107,7 @@ class PropertyCardBox(QWidget):
                 print("Max houses reached!")
                 self.housesOwnedSpinBox.setValue(4)
                 house_count = 4
-            self.rent = self.property.property_values[house_count]  # Grab house rent based on count
+            self.rent = self.property.property_values[house_count]
 
         self.currentRentAmountlabel.setText(f"${self.rent}")
 
@@ -133,7 +125,7 @@ class RailroadCardBox(QWidget):
         self.rent = 0
         self.total_profit = 0
 
-        # Set Railroad Picture
+        # Set Railroad Pictures
         self.pixmap = QPixmap('railroad.png')
         self.railroadPic1.setPixmap(self.pixmap)
         self.railroadPic2.setPixmap(self.pixmap)
@@ -150,7 +142,6 @@ class RailroadCardBox(QWidget):
         # Connect buttons to methods
         self.railroadOwnedSpinBox.valueChanged.connect(self.update_rent)
         self.railroadOwnedSpinBox.valueChanged.connect(self.update_railroad_logos)
-
         self.opponentLandedButton.clicked.connect(self.add_rent_to_total)
 
         # Set initial rent
