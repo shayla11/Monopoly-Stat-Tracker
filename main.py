@@ -71,7 +71,7 @@ class MainWindow(QMainWindow):
 
 
 class PropertyCardBox(QWidget):
-    def __init__(self, name: str, board_property: Utilities | Railroads | Properties):
+    def __init__(self, name: str, board_property: Properties):
         super().__init__()
         uic.loadUi("propertyCard.ui", self)
 
@@ -81,6 +81,7 @@ class PropertyCardBox(QWidget):
         # Set the name of the box to the property name
         self.propertyNameLabel.setText(name)
         # Set Color
+        self.propertyNameLabel.setStyleSheet(f"background-color: {board_property.value.color}; border: 1px solid black;")
 
         # Connect buttons to methods
         self.housesOwnedSpinBox.valueChanged.connect(self.update_rent)
