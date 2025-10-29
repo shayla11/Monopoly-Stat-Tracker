@@ -126,6 +126,9 @@
     <property name="text">
      <string>Logo</string>
     </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QCheckBox" name="ElectricCompnayCheckBox">
     <property name="geometry">

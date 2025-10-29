@@ -1,7 +1,7 @@
 from enum import Enum
 
-from classes.Property import Property
-from classes.Utility import Utility
+from Classes.Property import Property
+from Classes.Utility import Utility
 
 
 class Properties(Enum):

@@ -7,10 +7,9 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QWidget
 import sys
 
 import Enums
+from Classes.Utility import Utility
 from Enums import Utilities, Properties
-from classes.Railroad import Railroad
-
-UTILITIES_LIST = [Enums.Utilities.WATER_WORKS.name, Enums.Utilities.ELECTRIC_COMPANY.name]
+from Classes.Railroad import Railroad
 
 
 def get_property(name: str) -> Utilities | Railroad | Properties:
@@ -21,8 +20,8 @@ def get_property(name: str) -> Utilities | Railroad | Properties:
     # Check for Railroad or Utilities
     if enum_name.__contains__("RAILROAD"):
         board_property = Railroad("Railroad")
-    elif enum_name in UTILITIES_LIST:
-        board_property = Enums.Utilities[enum_name].value
+    elif enum_name.__contains__("UTILITY"):
+        board_property = Utility("Utility")
     else:
         board_property = Enums.Properties[enum_name].value
     return board_property
@@ -60,7 +59,7 @@ class MainWindow(QMainWindow):
             print("Owned Properties" + str(self.owned_properties))
 
             # Create box based on property, railroad, or utility
-            if board_property.name in UTILITIES_LIST:
+            if board_property.name.__contains__("Utility"):
                 self.utility_is_owned = True
                 box = UtilityCardBox(board_property)
             elif board_property.name.__contains__("Railroad"):
@@ -131,7 +130,7 @@ class RailroadCardBox(QWidget):
         self.total_profit = 0
 
         # Set Railroad Pictures
-        self.pixmap = QPixmap('railroad.png')
+        self.pixmap = QPixmap('Icons/railroad.png')
         self.railroadPic1.setPixmap(self.pixmap)
         self.railroadPic2.setPixmap(self.pixmap)
         self.railroadPic3.setPixmap(self.pixmap)
@@ -189,6 +188,7 @@ class RailroadCardBox(QWidget):
         self.total_profit = self.total_profit + self.rent
         self.totalProfitAmountLabel.setText(f"${self.total_profit}")
 
+
 class UtilityCardBox(QWidget):
     def __init__(self, board_property: Railroad):
         super().__init__()
@@ -199,6 +199,11 @@ class UtilityCardBox(QWidget):
         self.roll = 0
         self.total_profit = 0
 
+        # Set Utility Pictures
+        self.pixmap_electric = QPixmap('Icons/electriccompany.png')
+        self.pixmap_water = QPixmap('Icons/waterworks.png.png')
+        self.electricCompanyPic1.setPixmap(self.pixmap_electric)
+        self.waterWorksPic1.setPixmap(self.pixmap_water)
 
 
 if __name__ == "__main__":
