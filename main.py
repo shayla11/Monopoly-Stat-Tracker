@@ -42,6 +42,7 @@ class MainWindow(QMainWindow):
         self.buyPropertyButton.clicked.connect(self.add_box)
 
         self.railroad_is_owned = False
+        self.utility_is_owned = False
 
     def add_box(self):
         # Get name of property added
@@ -60,17 +61,17 @@ class MainWindow(QMainWindow):
 
             # Create box based on property, railroad, or utility
             if board_property.name in UTILITIES_LIST:
-                # box = UtilityCardBox()
-                print("utility card not ready yet")
+                self.utility_is_owned = True
+                box = UtilityCardBox(board_property)
             elif board_property.name.__contains__("Railroad"):
                 self.railroad_is_owned = True
                 box = RailroadCardBox(board_property)
-                box.setFixedSize(250, 400)
-                self.hbox_layout.addWidget(box)
             else:
                 box = PropertyCardBox(property_name, board_property)
-                box.setFixedSize(250, 400)  # Move outside else when railroad and utility is ready
-                self.hbox_layout.addWidget(box)  # Move outside else when railroad and utility is ready
+
+            # Add Box to horizontal scroll layout
+            box.setFixedSize(250, 400)
+            self.hbox_layout.addWidget(box)
 
 
 class PropertyCardBox(QWidget):
@@ -187,6 +188,17 @@ class RailroadCardBox(QWidget):
     def add_rent_to_total(self):
         self.total_profit = self.total_profit + self.rent
         self.totalProfitAmountLabel.setText(f"${self.total_profit}")
+
+class UtilityCardBox(QWidget):
+    def __init__(self, board_property: Railroad):
+        super().__init__()
+        uic.loadUi("UIs/utilityCard.ui", self)
+
+        self.utility = board_property
+        self.rent = 0
+        self.roll = 0
+        self.total_profit = 0
+
 
 
 if __name__ == "__main__":
