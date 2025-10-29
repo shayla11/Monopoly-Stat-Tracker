@@ -127,7 +127,7 @@
      <string>Logo</string>
     </property>
     <property name="scaledContents">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QCheckBox" name="ElectricCompnayCheckBox">
@@ -167,6 +167,9 @@
     </property>
     <property name="text">
      <string>Logo</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="currentRentAmountlabel">

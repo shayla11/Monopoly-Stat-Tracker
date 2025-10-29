@@ -200,8 +200,8 @@ class UtilityCardBox(QWidget):
         self.total_profit = 0
 
         # Set Utility Pictures
-        self.pixmap_electric = QPixmap('Icons/electriccompany.png')
-        self.pixmap_water = QPixmap('Icons/waterworks.png.png')
+        self.pixmap_electric = QPixmap('Icons/electriccompany.jpg')
+        self.pixmap_water = QPixmap('Icons/waterworks.jpg')
         self.electricCompanyPic1.setPixmap(self.pixmap_electric)
         self.waterWorksPic1.setPixmap(self.pixmap_water)
 
