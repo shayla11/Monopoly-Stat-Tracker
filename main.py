@@ -205,6 +205,25 @@ class UtilityCardBox(QWidget):
         self.electricCompanyPic1.setPixmap(self.pixmap_electric)
         self.waterWorksPic1.setPixmap(self.pixmap_water)
 
+        # Set starting card stats
+        self.ElectricCompanyCheckBox.setChecked(False)  # Uncheck the box
+        self.WaterWorksCheckBox.setChecked(False)  # Uncheck the box
+        self.currentRentAmountlabel.setText("$0 X")
+
+        self.ElectricCompanyCheckBox.toggled.connect(self.update_rent)
+        self.WaterWorksCheckBox.toggled.connect(self.update_rent)
+        self.opponentLandedButton.clicked.connect(self.add_rent_to_total)
+
+
+    def update_rent(self, checked):
+        """Update label text based on checkbox state."""
+        if self.ElectricCompanyCheckBox.isChecked() and self.WaterWorksCheckBox.isChecked():
+            self.currentRentAmountlabel.setText("$8 X")
+        elif self.ElectricCompanyCheckBox.isChecked() or self.WaterWorksCheckBox.isChecked():
+            self.currentRentAmountlabel.setText("$4 X")
+        else:
+            self.currentRentAmountlabel.setText("$0 X")
+
 
 if __name__ == "__main__":
     app = QApplication([])

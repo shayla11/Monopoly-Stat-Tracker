@@ -130,7 +130,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QCheckBox" name="ElectricCompnayCheckBox">
+   <widget class="QCheckBox" name="ElectricCompanyCheckBox">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -176,7 +176,7 @@
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>200</y>
+      <y>190</y>
       <width>51</width>
       <height>21</height>
      </rect>
@@ -194,10 +194,15 @@
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>200</y>
+      <y>190</y>
       <width>48</width>
       <height>24</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
     </property>
     <property name="minimum">
      <number>2</number>
@@ -210,7 +215,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>200</y>
+      <y>190</y>
       <width>121</width>
       <height>16</height>
      </rect>
