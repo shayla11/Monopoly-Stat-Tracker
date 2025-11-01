@@ -214,15 +214,21 @@ class UtilityCardBox(QWidget):
         self.WaterWorksCheckBox.toggled.connect(self.update_rent)
         self.opponentLandedButton.clicked.connect(self.add_rent_to_total)
 
-
-    def update_rent(self, checked):
+    def update_rent(self):
         """Update label text based on checkbox state."""
         if self.ElectricCompanyCheckBox.isChecked() and self.WaterWorksCheckBox.isChecked():
             self.currentRentAmountlabel.setText("$8 X")
+            self.rent = 8
         elif self.ElectricCompanyCheckBox.isChecked() or self.WaterWorksCheckBox.isChecked():
             self.currentRentAmountlabel.setText("$4 X")
+            self.rent = 4
         else:
             self.currentRentAmountlabel.setText("$0 X")
+
+    def add_rent_to_total(self):
+        opponent_roll = int(self.UtilitySpinBox.value())  # Get current spinbox value
+        self.total_profit = self.total_profit + (self.rent*opponent_roll)
+        self.totalProfitAmountLabel.setText(f"${self.total_profit}")
 
 
 if __name__ == "__main__":
