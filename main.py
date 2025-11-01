@@ -7,10 +7,9 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QWidget
 import sys
 
 import Enums
+from Classes.Utility import Utility
 from Enums import Utilities, Properties
-from classes.Railroad import Railroad
-
-UTILITIES_LIST = [Enums.Utilities.WATER_WORKS.name, Enums.Utilities.ELECTRIC_COMPANY.name]
+from Classes.Railroad import Railroad
 
 
 def get_property(name: str) -> Utilities | Railroad | Properties:
@@ -21,8 +20,8 @@ def get_property(name: str) -> Utilities | Railroad | Properties:
     # Check for Railroad or Utilities
     if enum_name.__contains__("RAILROAD"):
         board_property = Railroad("Railroad")
-    elif enum_name in UTILITIES_LIST:
-        board_property = Enums.Utilities[enum_name].value
+    elif enum_name.__contains__("UTILITY"):
+        board_property = Utility("Utility")
     else:
         board_property = Enums.Properties[enum_name].value
     return board_property
@@ -42,6 +41,7 @@ class MainWindow(QMainWindow):
         self.buyPropertyButton.clicked.connect(self.add_box)
 
         self.railroad_is_owned = False
+        self.utility_is_owned = False
 
     def add_box(self):
         # Get name of property added
@@ -59,18 +59,18 @@ class MainWindow(QMainWindow):
             print("Owned Properties" + str(self.owned_properties))
 
             # Create box based on property, railroad, or utility
-            if board_property.name in UTILITIES_LIST:
-                # box = UtilityCardBox()
-                print("utility card not ready yet")
+            if board_property.name.__contains__("Utility"):
+                self.utility_is_owned = True
+                box = UtilityCardBox(board_property)
             elif board_property.name.__contains__("Railroad"):
                 self.railroad_is_owned = True
                 box = RailroadCardBox(board_property)
-                box.setFixedSize(250, 400)
-                self.hbox_layout.addWidget(box)
             else:
                 box = PropertyCardBox(property_name, board_property)
-                box.setFixedSize(250, 400)  # Move outside else when railroad and utility is ready
-                self.hbox_layout.addWidget(box)  # Move outside else when railroad and utility is ready
+
+            # Add Box to horizontal scroll layout
+            box.setFixedSize(250, 400)
+            self.hbox_layout.addWidget(box)
 
 
 class PropertyCardBox(QWidget):
@@ -130,7 +130,7 @@ class RailroadCardBox(QWidget):
         self.total_profit = 0
 
         # Set Railroad Pictures
-        self.pixmap = QPixmap('railroad.png')
+        self.pixmap = QPixmap('Icons/railroad.png')
         self.railroadPic1.setPixmap(self.pixmap)
         self.railroadPic2.setPixmap(self.pixmap)
         self.railroadPic3.setPixmap(self.pixmap)
@@ -186,6 +186,48 @@ class RailroadCardBox(QWidget):
 
     def add_rent_to_total(self):
         self.total_profit = self.total_profit + self.rent
+        self.totalProfitAmountLabel.setText(f"${self.total_profit}")
+
+
+class UtilityCardBox(QWidget):
+    def __init__(self, board_property: Railroad):
+        super().__init__()
+        uic.loadUi("UIs/utilityCard.ui", self)
+
+        self.utility = board_property
+        self.rent = 0
+        self.roll = 0
+        self.total_profit = 0
+
+        # Set Utility Pictures
+        self.pixmap_electric = QPixmap('Icons/electriccompany.jpg')
+        self.pixmap_water = QPixmap('Icons/waterworks.jpg')
+        self.electricCompanyPic1.setPixmap(self.pixmap_electric)
+        self.waterWorksPic1.setPixmap(self.pixmap_water)
+
+        # Set starting card stats
+        self.ElectricCompanyCheckBox.setChecked(False)  # Uncheck the box
+        self.WaterWorksCheckBox.setChecked(False)  # Uncheck the box
+        self.currentRentAmountlabel.setText("$0 X")
+
+        self.ElectricCompanyCheckBox.toggled.connect(self.update_rent)
+        self.WaterWorksCheckBox.toggled.connect(self.update_rent)
+        self.opponentLandedButton.clicked.connect(self.add_rent_to_total)
+
+    def update_rent(self):
+        """Update label text based on checkbox state."""
+        if self.ElectricCompanyCheckBox.isChecked() and self.WaterWorksCheckBox.isChecked():
+            self.currentRentAmountlabel.setText("$8 X")
+            self.rent = 8
+        elif self.ElectricCompanyCheckBox.isChecked() or self.WaterWorksCheckBox.isChecked():
+            self.currentRentAmountlabel.setText("$4 X")
+            self.rent = 4
+        else:
+            self.currentRentAmountlabel.setText("$0 X")
+
+    def add_rent_to_total(self):
+        opponent_roll = int(self.UtilitySpinBox.value())  # Get current spinbox value
+        self.total_profit = self.total_profit + (self.rent*opponent_roll)
         self.totalProfitAmountLabel.setText(f"${self.total_profit}")
 
 
